@@ -1,7 +1,14 @@
-import NextAuth, { type NextAuthOptions } from "next-auth";
-import { type OAuthConfig } from "next-auth/providers/oauth";
+import NextAuth, { NextAuthOptions } from "next-auth";
+import type { OAuthConfig } from "next-auth/providers/oauth";
 
-const YahooProvider: OAuthConfig<any> = {
+type YahooProfile = {
+  sub: string;
+  name: string;
+  email: string;
+  picture: string;
+};
+
+const YahooProvider: OAuthConfig<YahooProfile> = {
   id: "yahoo",
   name: "Yahoo",
   type: "oauth",
@@ -46,4 +53,5 @@ const authOptions: NextAuthOptions = {
 };
 
 const handler = NextAuth(authOptions);
+
 export { handler as GET, handler as POST };
