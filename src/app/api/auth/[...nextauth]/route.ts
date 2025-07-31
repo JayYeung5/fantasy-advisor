@@ -1,10 +1,11 @@
-import NextAuth from "next-auth";
-import type { NextAuthOptions } from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
+import { type OAuthConfig } from "next-auth/providers/oauth";
 
-const YahooProvider = {
+const YahooProvider: OAuthConfig<any> = {
   id: "yahoo",
   name: "Yahoo",
   type: "oauth",
+  version: "2.0",
   authorization: {
     url: "https://api.login.yahoo.com/oauth2/request_auth",
     params: { scope: "openid email profile" },
@@ -13,7 +14,7 @@ const YahooProvider = {
   userinfo: "https://api.login.yahoo.com/openid/v1/userinfo",
   clientId: process.env.YAHOO_CLIENT_ID!,
   clientSecret: process.env.YAHOO_CLIENT_SECRET!,
-  profile(profile: Record<string, any>) {
+  profile(profile) {
     return {
       id: profile.sub,
       name: profile.name,
@@ -23,8 +24,8 @@ const YahooProvider = {
   },
 };
 
-const handler = NextAuth({
-  providers: [YahooProvider] as unknown as NextAuthOptions["providers"],
+const authOptions: NextAuthOptions = {
+  providers: [YahooProvider],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, account }) {
@@ -35,11 +36,14 @@ const handler = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken as string;
-      session.refreshToken = token.refreshToken as string;
-      return session;
+      return {
+        ...session,
+        accessToken: token.accessToken,
+        refreshToken: token.refreshToken,
+      };
     },
   },
-});
+};
 
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
