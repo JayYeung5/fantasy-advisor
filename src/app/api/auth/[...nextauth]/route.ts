@@ -1,10 +1,10 @@
 import NextAuth from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 
 const YahooProvider = {
   id: "yahoo",
   name: "Yahoo",
   type: "oauth",
-  version: "2.0",
   authorization: {
     url: "https://api.login.yahoo.com/oauth2/request_auth",
     params: { scope: "openid email profile" },
@@ -13,7 +13,7 @@ const YahooProvider = {
   userinfo: "https://api.login.yahoo.com/openid/v1/userinfo",
   clientId: process.env.YAHOO_CLIENT_ID!,
   clientSecret: process.env.YAHOO_CLIENT_SECRET!,
-  profile(profile: any) {
+  profile(profile: Record<string, any>) {
     return {
       id: profile.sub,
       name: profile.name,
@@ -24,7 +24,7 @@ const YahooProvider = {
 };
 
 const handler = NextAuth({
-  providers: [YahooProvider as any],
+  providers: [YahooProvider] as unknown as NextAuthOptions["providers"],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, account }) {
@@ -35,10 +35,8 @@ const handler = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      // @ts-ignore
-      session.accessToken = token.accessToken;
-      // @ts-ignore
-      session.refreshToken = token.refreshToken;
+      session.accessToken = token.accessToken as string;
+      session.refreshToken = token.refreshToken as string;
       return session;
     },
   },
