@@ -17,7 +17,7 @@ export default function LoginPage() {
     <main className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-3xl font-bold mb-4">Login</h1>
       <button
-        className="bg-yellow-500 text-white px-6 py-3 rounded"
+        className="bg-purple-600 text-white px-6 py-3 rounded"
         onClick={() => signIn('yahoo', { callbackUrl: '/home' })}
       >
         Sign in with Yahoo
