@@ -15,6 +15,9 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-6 py-3 flex gap-4 font-semibold shadow-md sticky top-0 z-50">
+      <Link href="/home" className={`${baseStyle} ${isActive("/home") ? activeStyle : inactiveStyle}`}>
+        Home
+      </Link>
       <Link href="/dashboard" className={`${baseStyle} ${isActive("/dashboard") ? activeStyle : inactiveStyle}`}>
         Dashboard
       </Link>
