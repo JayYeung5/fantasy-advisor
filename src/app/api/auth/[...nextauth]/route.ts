@@ -13,10 +13,10 @@ const YahooProvider: OAuthConfig<YahooProfile> = {
   name: "Yahoo",
   type: "oauth",
   version: "2.0",
-  authorization: {
-    url: "https://api.login.yahoo.com/oauth2/request_auth",
-    params: { scope: "openid email profile" },
-  },
+ authorization: {
+  url: "https://api.login.yahoo.com/oauth2/request_auth",
+  params: { scope: "openid email" },
+},
   token: "https://api.login.yahoo.com/oauth2/get_token",
   userinfo: "https://api.login.yahoo.com/openid/v1/userinfo",
   clientId: process.env.YAHOO_CLIENT_ID!,

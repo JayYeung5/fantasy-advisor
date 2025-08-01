@@ -10,7 +10,7 @@ export default function Home() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/login'); // 🚫 Block access if not logged in
+      router.push('/login');
     }
   }, [status]);
 
