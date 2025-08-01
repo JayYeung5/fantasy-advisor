@@ -52,6 +52,12 @@ const authOptions: NextAuthOptions = {
   },
 };
 
-const handler = NextAuth(authOptions);
+const handler = NextAuth({
+  providers: [YahooProvider],
+  secret: process.env.NEXTAUTH_SECRET,
+  debug: true,
+  callbacks: {
+  },
+});
 
 export { handler as GET, handler as POST };
