@@ -1,18 +1,33 @@
 'use client';
-import { useSession } from 'next-auth/react';
+
+import { useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 export default function TeamPage() {
-  const { data: session, status } = useSession();
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login');
-    }
-  }, [status]);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.replace('/login');
+      } else {
+        setAuthenticated(true);
+      }
+      setLoading(false);
+    });
 
-  if (status === 'loading') return <p>Loading...</p>;
-  return <div>Team Evaluator Coming Soon</div>;
+    return () => unsubscribe();
+  }, [router]);
+
+  if (loading || !authenticated) return <p className="text-white text-center mt-10">Loading...</p>;
+
+  return (
+    <main className="min-h-screen flex items-center justify-center text-white bg-gray-900">
+      <h1 className="text-3xl">Team Evaluator - Coming Soon</h1>
+    </main>
+  );
 }
